@@ -1,7 +1,6 @@
 from django import forms
 from .models import ContratoLaboral, FiniquitoLaboral, LiquidacionLaboral
 
-# 📝 Formulario para contrato laboral
 class ContratoForm(forms.ModelForm):
     class Meta:
         model = ContratoLaboral
@@ -21,7 +20,6 @@ class ContratoForm(forms.ModelForm):
             'tipo_contrato': forms.Select(attrs={'class': 'w-full border px-3 py-2 rounded bg-white'}),
         }
 
-# 📄 Formulario para finiquito laboral
 class FiniquitoForm(forms.ModelForm):
     class Meta:
         model = FiniquitoLaboral
@@ -33,7 +31,6 @@ class FiniquitoForm(forms.ModelForm):
             'fecha_finiquito': forms.DateInput(attrs={'type': 'date'}),
         }
 
-# 📋 Formulario para liquidación laboral
 class LiquidacionForm(forms.ModelForm):
     class Meta:
         model = LiquidacionLaboral

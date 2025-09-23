@@ -10,7 +10,6 @@ def generar_contrato_pdf(contrato):
     contrato_filename = f"contrato_{contrato.rut_trabajador}_{contrato.alias}.pdf"
     return ContentFile(pdf_file, name=contrato_filename)
 
-# trabajadores/helpers.py
 from weasyprint import HTML
 from django.template.loader import render_to_string
 from django.core.files.base import ContentFile
@@ -21,8 +20,6 @@ def generar_finiquito_pdf(finiquito):
     nombre_archivo = f"finiquito_{finiquito.trabajador.rut_trabajador}_{finiquito.alias}.pdf"
     return ContentFile(pdf_file, name=nombre_archivo)
 
-
-# helpers.py
 from weasyprint import HTML
 from django.template.loader import render_to_string
 from django.core.files.base import ContentFile
@@ -79,7 +76,7 @@ def calcular_afp(nombre_afp, sueldo_base, gratificacion, bonos):
     }
 
     nombre = nombre_afp.lower()
-    comision = COMISIONES_AFP.get(nombre, 0.0116)  # valor por defecto
+    comision = COMISIONES_AFP.get(nombre, 0.0116) 
 
     imponible = sueldo_base + gratificacion + bonos
     cotizacion = imponible * 0.10
@@ -119,9 +116,9 @@ def calcular_seguro_cesantia(tipo_contrato, sueldo_base, dias_trabajados, dias_m
         return 0  # por defecto, sin aporte
 
 
-# trabajadores/helpers.py
+
 def calcular_liquido_pagado(liquidacion):
-    # Días base del mes (puedes hacerlo dinámico si quieres)
+
     dias_mes = 30
 
     # Sueldo proporcional
