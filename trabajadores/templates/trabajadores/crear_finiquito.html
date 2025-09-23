@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear finiquito · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <header class="bg-red-700 text-white py-4 shadow">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">🧾 Nuevo finiquito · {{ alias }}</h1>
+      <a href="/trabajadores/{{ alias }}/finiquitos/" class="text-sm hover:underline">⬅️ Volver a finiquitos</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <section class="bg-white p-6 rounded shadow space-y-6">
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {{ form.trabajador.label_tag }} {{ form.trabajador }}
+          {{ form.fecha_finiquito.label_tag }} {{ form.fecha_finiquito }}
+          {{ form.motivo.label_tag }} {{ form.motivo }}
+          {{ form.indemnizacion.label_tag }} {{ form.indemnizacion }}
+          {{ form.vacaciones_pendientes.label_tag }} {{ form.vacaciones_pendientes }}
+          {{ form.otros.label_tag }} {{ form.otros }}
+        </div>
+        <div class="pt-6">
+          <button type="submit" class="bg-red-700 text-white px-6 py-2 rounded hover:bg-red-800 transition">
+            ✅ Generar finiquito
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar contrato · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <header class="bg-yellow-600 text-white py-4 shadow">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">✏️ Editar contrato · {{ contrato.nombre }}</h1>
+      <a href="/rrhh/{{ alias }}/contratos/" class="text-sm hover:underline">⬅️ Volver a contratos</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <section class="bg-white p-6 rounded shadow space-y-6">
+
+      <h2 class="text-lg font-semibold text-yellow-700">🛠️ Modificar datos del contrato</h2>
+
+      {% if form.errors %}
+        <div class="bg-red-100 text-red-700 p-4 rounded">
+          <p class="font-semibold">⚠️ Hay errores en el formulario:</p>
+          <ul class="list-disc ml-5">
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {{ form.rut_trabajador.label_tag }} {{ form.rut_trabajador }}
+          {{ form.nombre.label_tag }} {{ form.nombre }}
+          {{ form.cargo.label_tag }} {{ form.cargo }}
+          {{ form.jornada.label_tag }} {{ form.jornada }}
+          {{ form.sueldo_base.label_tag }} {{ form.sueldo_base }}
+          {{ form.gratificacion.label_tag }} {{ form.gratificacion }}
+          {{ form.bonos.label_tag }} {{ form.bonos }}
+          {{ form.tipo_contrato.label_tag }} {{ form.tipo_contrato }}
+          {{ form.fecha_inicio.label_tag }} {{ form.fecha_inicio }}
+          {{ form.fecha_termino.label_tag }} {{ form.fecha_termino }}
+        </div>
+
+        <div class="pt-6">
+          <button type="submit" class="bg-yellow-600 text-white px-6 py-2 rounded hover:bg-yellow-700 transition">
+            💾 Guardar cambios
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+</body>
+</html>

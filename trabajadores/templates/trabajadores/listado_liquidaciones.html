@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Liquidaciones · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Encabezado -->
+  <header class="bg-green-800 text-white py-5 shadow-md">
+    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+      <h1 class="text-2xl font-bold">📋 Liquidaciones · <span class="text-white/80">{{ alias }}</span></h1>
+      <a href="/contabilidad/{{ alias }}/libro/" class="text-sm hover:underline">⬅️ Volver al panel</a>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="max-w-6xl mx-auto px-6 py-10 space-y-8">
+
+    <!-- Filtros -->
+    <form method="get" class="bg-white p-4 rounded shadow flex flex-wrap items-center gap-4">
+      <div>
+        <label for="mes" class="text-sm font-medium text-gray-700">📅 Mes:</label>
+        <input type="month" name="mes" id="mes" value="{{ filtro_mes }}" class="border px-3 py-2 rounded w-40">
+      </div>
+      <div>
+        <label for="trabajador" class="text-sm font-medium text-gray-700">👤 Trabajador:</label>
+        <select name="trabajador" id="trabajador" class="border px-3 py-2 rounded w-48">
+          <option value="">Todos</option>
+          {% for t in trabajadores %}
+            <option value="{{ t.id }}" {% if t.id|stringformat:"s" == filtro_trabajador %}selected{% endif %}>{{ t.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800 text-sm">
+        🔍 Filtrar
+      </button>
+      <a href="/trabajadores/{{ alias }}/crear_liquidacion/" class="ml-auto bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800 text-sm">
+        ➕ Crear nueva liquidación
+      </a>
+    </form>
+
+    <!-- Tabla de liquidaciones -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-md">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-200 text-gray-700 sticky top-0">
+          <tr>
+            <th class="px-6 py-3 text-left font-semibold">👤 Trabajador</th>
+            <th class="px-6 py-3 text-left font-semibold">📅 Mes</th>
+            <th class="px-6 py-3 text-left font-semibold">💰 Total líquido</th>
+            <th class="px-6 py-3 text-left font-semibold">📁 PDF</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for liquidacion in liquidaciones %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-3">{{ liquidacion.trabajador.nombre }}</td>
+            <td class="px-6 py-3">{{ liquidacion.mes }}</td>
+            <td class="px-6 py-3 font-semibold text-green-700">${{ liquidacion.liquido_pagado }}</td>
+            <td class="px-6 py-3">
+              {% if liquidacion.documento_pdf %}
+                <a href="/trabajadores/{{ alias }}/liquidacion/{{ liquidacion.id }}/pdf/" class="text-blue-600 hover:underline">📄 Ver PDF</a>
+              {% else %}
+                <span class="text-gray-400">No generado</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="px-6 py-6 text-center text-gray-500">No hay liquidaciones registradas.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</body>
+</html>

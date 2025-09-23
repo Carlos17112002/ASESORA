@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lecturas · {{ empresa.nombre }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Contenedor principal -->
+  <div class="max-w-6xl mx-auto py-10 px-6 space-y-10">
+
+    <!-- Título -->
+    <header class="flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-green-700">Lecturas · {{ empresa.nombre }}</h1>
+      <a href="{% url 'mapa_lecturas' alias=slug %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm font-medium shadow">
+        Ver Mapa de Clientes
+      </a>
+    </header>
+
+    <!-- Filtros -->
+    <section class="bg-white rounded-lg shadow p-6">
+      <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Sector</label>
+          <select name="sector" class="w-full border-gray-300 rounded-md shadow-sm">
+            <option value="">Todos</option>
+            {% for sector in sectores %}
+              <option value="{{ sector }}" {% if request.GET.sector == sector %}selected{% endif %}>{{ sector }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+          <input type="date" name="fecha" value="{{ request.GET.fecha }}" class="w-full border-gray-300 rounded-md shadow-sm">
+        </div>
+
+        <div>
+          <button type="submit" class="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 shadow text-sm font-medium">
+            Filtrar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Tabla de lecturas -->
+    <section>
+      {% if lecturas %}
+        <div class="overflow-x-auto bg-white rounded-lg shadow">
+          <table class="min-w-full text-sm">
+            <thead class="bg-green-700 text-white">
+              <tr>
+                <th class="px-4 py-3 text-left">Cliente</th>
+                <th class="px-4 py-3 text-left">Medidor</th>
+                <th class="px-4 py-3 text-left">Sector</th>
+                <th class="px-4 py-3 text-left">Fecha</th>
+                <th class="px-4 py-3 text-left">Valor</th>
+                <th class="px-4 py-3 text-left">Observación</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              {% for lectura in lecturas %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3">{{ lectura.cliente.nombre }}</td>
+                <td class="px-4 py-3">{{ lectura.cliente.medidor }}</td>
+                <td class="px-4 py-3">{{ lectura.cliente.sector }}</td>
+                <td class="px-4 py-3">{{ lectura.fecha }}</td>
+                <td class="px-4 py-3">{{ lectura.valor }} m³</td>
+                <td class="px-4 py-3">{{ lectura.observacion|default:"—" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="bg-white rounded-lg shadow p-6 text-center text-gray-500">
+          No hay lecturas registradas con esos filtros.
+        </div>
+      {% endif %}
+    </section>
+
+    <!-- Volver -->
+    <footer class="text-right">
+      <a href="{% url 'panel_empresa' slug=slug %}" class="text-sm text-blue-600 hover:underline">← Volver al Panel</a>
+    </footer>
+
+  </div>
+
+</body>
+</html>

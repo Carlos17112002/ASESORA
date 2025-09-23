@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cierre de Caja · {{ empresa.nombre }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+  <main class="max-w-6xl mx-auto py-10 px-6 space-y-10">
+    <header class="flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-green-700">Cierre de Caja · {{ empresa.nombre }}</h1>
+      <a href="{% url 'panel_empresa' slug=slug %}" class="text-sm text-blue-600 hover:underline">← Volver al panel</a>
+    </header>
+
+    <section>
+      {% if cierres %}
+        <div class="overflow-x-auto bg-white rounded-lg shadow">
+          <table class="min-w-full text-sm">
+            <thead class="bg-green-700 text-white">
+              <tr>
+                <th class="px-4 py-3 text-left">Fecha</th>
+                <th class="px-4 py-3 text-left">Total Ingresos</th>
+                <th class="px-4 py-3 text-left">Total Egresos</th>
+                <th class="px-4 py-3 text-left">Saldo Final</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              {% for cierre in cierres %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3">{{ cierre.fecha|date:"d/m/Y" }}</td>
+                <td class="px-4 py-3">${{ cierre.ingresos }}</td>
+                <td class="px-4 py-3">${{ cierre.egresos }}</td>
+                <td class="px-4 py-3 font-semibold">${{ cierre.saldo }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="bg-white rounded-lg shadow p-6 text-center text-gray-500">
+          No hay cierres de caja registrados.
+        </div>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>

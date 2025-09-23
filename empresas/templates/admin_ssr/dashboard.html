@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel General SSR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Header -->
+  <header class="bg-green-700 text-white shadow">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
+      <h1 class="text-2xl font-bold tracking-wide">Panel General SSR</h1>
+      <div class="flex gap-4">
+        <a href="{% url 'crear_empresa' %}" class="bg-white text-green-700 px-4 py-2 rounded hover:bg-green-100 shadow-sm text-sm font-medium">
+          Nueva Empresa
+        </a>
+        <a href="{% url 'logout_ssr' %}" class="text-sm text-red-200 hover:underline">Cerrar sesión</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto py-10 px-6 space-y-10">
+
+    <!-- Empresas -->
+    <section>
+      <h2 class="text-xl font-semibold text-gray-700 mb-6">Empresas registradas</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for empresa, estado in empresas_con_estado %}
+        <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition p-6 flex flex-col justify-between border border-gray-200">
+          <!-- Info básica -->
+          <div class="mb-4">
+            <h3 class="text-lg font-bold text-green-700">{{ empresa.nombre }}</h3>
+            <p class="text-xs text-gray-500">Slug: <span class="font-mono">{{ empresa.slug }}</span></p>
+            <p class="text-xs text-gray-500">Alta: {{ empresa.fecha_creacion|date:"d/m/Y" }}</p>
+          </div>
+
+          <!-- Estados -->
+          <div class="grid grid-cols-2 gap-2 text-xs mb-4">
+            <div class="bg-gray-100 rounded px-2 py-1 text-center">
+              Base: {% if estado.base_creada %}
+                <span class="text-green-600 font-semibold">Activa</span>
+              {% else %}
+                <span class="text-red-600 font-semibold">Inactiva</span>
+              {% endif %}
+            </div>
+            <div class="bg-gray-100 rounded px-2 py-1 text-center">
+              Alias: {% if estado.alias_registrado %}
+                <span class="text-green-600 font-semibold">Registrado</span>
+              {% else %}
+                <span class="text-yellow-600 font-semibold">Faltante</span>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Acciones -->
+          <div class="space-y-2">
+            <a href="{% url 'panel_empresa' empresa.slug %}" class="block w-full text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-sm font-medium">
+              Panel SSR
+            </a>
+            <a href="{% url 'crear_admin_empresa' empresa.slug %}" class="block w-full text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700 text-sm font-medium">
+              Crear Admin
+            </a>
+            <a href="{% url 'panel_contable' empresa.slug %}" class="block w-full text-center bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 text-sm font-medium">
+              Contabilidad
+            </a>
+            <form method="post" action="{% url 'eliminar_empresa' empresa.slug %}" onsubmit="return confirm('¿Eliminar esta empresa? Esta acción no se puede deshacer.')">
+              {% csrf_token %}
+              <button type="submit" class="w-full text-center bg-red-600 text-white py-2 rounded hover:bg-red-700 text-sm font-medium">
+                Eliminar Empresa
+              </button>
+            </form>
+          </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center text-gray-500">
+          <p>No hay empresas registradas.</p>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+   
+  </main>
+
+</body>
+</html>

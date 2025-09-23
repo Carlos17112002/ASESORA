@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Revisión libro SII · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <header class="bg-green-700 text-white py-4 shadow">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">🔍 Revisión libro SII · {{ alias }}</h1>
+      <a href="/contabilidad/{{ alias }}/libros/" class="text-sm hover:underline">⬅️ Volver a lista</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10 space-y-8">
+
+    <!-- Datos del libro -->
+    <section class="bg-white p-6 rounded-lg shadow">
+      <h2 class="text-lg font-semibold text-green-700 mb-4">📄 Detalles del libro</h2>
+      <ul class="text-sm space-y-2">
+        <li><strong>Tipo:</strong> {{ libro.tipo|capfirst }}</li>
+        <li><strong>Mes:</strong> {{ libro.mes }}</li>
+        <li><strong>Año:</strong> {{ libro.año }}</li>
+        <li><strong>Usuario:</strong> {{ libro.usuario }}</li>
+        <li><strong>Fecha subida:</strong> {{ libro.fecha_subida|date:"d/m/Y H:i" }}</li>
+        <li><strong>Estado:</strong>
+          {% if libro.estado == 'procesando' %}
+            <span class="text-yellow-700 font-semibold">Procesando</span>
+          {% elif libro.estado == 'validado' %}
+            <span class="text-green-700 font-semibold">Validado</span>
+          {% elif libro.estado == 'error' %}
+            <span class="text-red-700 font-semibold">Con error</span>
+          {% else %}
+            <span class="text-gray-700 font-semibold">Subido</span>
+          {% endif %}
+        </li>
+      </ul>
+    </section>
+
+    <!-- Totales -->
+    <section class="bg-white p-6 rounded-lg shadow">
+      <h2 class="text-lg font-semibold text-green-700 mb-4">📊 Totales del archivo</h2>
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div><strong>Documentos:</strong> {{ totales.documentos }}</div>
+        <div><strong>Monto Neto:</strong> ${{ totales.neto|floatformat:0 }}</div>
+        <div><strong>IVA:</strong> ${{ totales.iva|floatformat:0 }}</div>
+        <div><strong>Total:</strong> ${{ totales.total|floatformat:0 }}</div>
+      </div>
+    </section>
+
+    <!-- Vista previa -->
+    <section class="bg-white p-6 rounded-lg shadow">
+      <h2 class="text-lg font-semibold text-green-700 mb-4">👀 Vista previa del archivo</h2>
+      {% if preview %}
+        <div class="overflow-x-auto">
+          <table class="min-w-full table-auto text-sm">
+            <thead class="bg-green-100 text-green-800">
+              <tr>
+                {% for key in preview.0.keys %}
+                  <th class="px-4 py-2 text-left">{{ key }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in preview %}
+                <tr class="border-b hover:bg-green-50">
+                  {% for value in row.values %}
+                    <td class="px-4 py-2">{{ value }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-sm text-gray-500">No se pudo mostrar vista previa del archivo.</p>
+      {% endif %}
+    </section>
+
+  </main>
+</body>
+</html>

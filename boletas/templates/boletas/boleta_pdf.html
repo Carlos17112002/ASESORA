@@ -1,0 +1,165 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page {
+      size: A4;
+      margin: 2cm;
+    }
+
+    body {
+      font-family: "Arial", sans-serif;
+      font-size: 12px;
+      color: #2c2c2c;
+      line-height: 1.5;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      color: #1a7f37;
+      margin-bottom: 5px;
+    }
+
+    .header .empresa {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .left, .right {
+      width: 48%;
+    }
+
+    .section {
+      border: 1px solid #ccc;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #1a7f37;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 4px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .label {
+      font-weight: bold;
+      color: #444;
+    }
+
+    .value {
+      color: #000;
+    }
+
+    .total {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1a7f37;
+      text-align: right;
+      margin-top: 10px;
+    }
+
+    .barcode {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .barcode img {
+      height: 50px;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 10px;
+      color: #888;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>BOLETA ELECTRÓNICA</h1>
+    <div class="empresa">{{ empresa.nombre }} - RUT {{ empresa.rut }}</div>
+  </div>
+
+  <div class="grid">
+    <div class="left">
+      <div class="section">
+        <div class="section-title">Datos del Cliente</div>
+        <div class="row"><span class="label">RUT:</span> <span class="value">{{ cliente.rut }}</span></div>
+        <div class="row"><span class="label">N° Servicio:</span> <span class="value">{{ cliente.numero_servicio }}</span></div>
+        <div class="row"><span class="label">Dirección:</span> <span class="value">{{ cliente.direccion }}</span></div>
+        <div class="row"><span class="label">Periodo:</span> <span class="value">{{ boleta.periodo }}</span></div>
+        <div class="row"><span class="label">Vencimiento:</span> <span class="value">{{ boleta.fecha_vencimiento|date:"d-m-Y" }}</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Detalle de Consumo</div>
+        <div class="row"><span class="label">Lectura Actual:</span> <span class="value">{{ boleta.lectura_actual }} m³</span></div>
+        <div class="row"><span class="label">Lectura Anterior:</span> <span class="value">{{ boleta.lectura_anterior }} m³</span></div>
+        <div class="row"><span class="label">Consumo Mes:</span> <span class="value">{{ boleta.consumo }} m³</span></div>
+        <div class="row"><span class="label">Promedio últimos 6 meses:</span> <span class="value">{{ boleta.promedio_6_meses }} m³</span></div>
+        <div class="row"><span class="label">Consumo mismo mes año anterior:</span> <span class="value">{{ boleta.consumo_ano_anterior }} m³</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Estado de la Boleta</div>
+        <div class="row">
+          <span class="label">Estado:</span>
+          <span class="value">
+            {% if boleta.pagada %}Pagada{% else %}Pendiente{% endif %}
+          </span>
+        </div>
+        {% if boleta.pagada %}
+          <div class="row"><span class="label">Fecha de pago:</span> <span class="value">{{ boleta.fecha_pago|date:"d-m-Y" }}</span></div>
+          <div class="row"><span class="label">Método:</span> <span class="value">{{ boleta.metodo_pago }}</span></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="section">
+        <div class="section-title">Cargos</div>
+        <div class="row"><span class="label">Cargo fijo:</span> <span class="value">${{ boleta.cargo_fijo|floatformat:0|intcomma }}</span></div>
+        <div class="row"><span class="label">Consumo agua potable:</span> <span class="value">${{ boleta.consumo_agua|floatformat:0|intcomma }}</span></div>
+        <div class="row"><span class="label">Consumo aguas servidas:</span> <span class="value">${{ boleta.consumo_servidas|floatformat:0|intcomma }}</span></div>
+        <div class="row"><span class="label">Tratamiento aguas servidas:</span> <span class="value">${{ boleta.tratamiento|floatformat:0|intcomma }}</span></div>
+        <div class="total">Total a pagar: ${{ boleta.monto|floatformat:0|intcomma }}</div>
+      </div>
+
+      <div class="barcode">
+        <img src="{{ STATIC_URL }}img/barcode_placeholder.png" alt="Código de barras">
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Esta boleta ha sido generada automáticamente por el sistema SSR.  
+    Para consultas, comuníquese con {{ empresa.nombre }} al {{ empresa.telefono }} o visite {{ empresa.web }}.
+  </div>
+
+</body>
+</html>

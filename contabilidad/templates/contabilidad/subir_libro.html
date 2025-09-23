@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Subir libro SII · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function toggleCampos() {
+      const tipo = document.getElementById('tipo-libro').value;
+      document.getElementById('codigo-compra').style.display = tipo === 'compra' ? 'block' : 'none';
+      document.getElementById('campos-compra').style.display = tipo === 'compra' ? 'block' : 'none';
+      document.getElementById('campos-venta').style.display = tipo === 'venta' ? 'block' : 'none';
+      document.getElementById('campos-retenciones').style.display = tipo === 'retenciones' ? 'block' : 'none';
+      document.getElementById('campos-ingreso-retenciones').style.display = tipo === 'ingreso_retenciones' ? 'block' : 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', toggleCampos);
+  </script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <header class="bg-green-700 text-white py-4 shadow">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">📁 Subir libro SII · {{ alias }}</h1>
+      <a href="/contabilidad/{{ alias }}/libros/" class="text-sm hover:underline">⬅️ Ver libros subidos</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <form method="post" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow space-y-6">
+      {% csrf_token %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <!-- Mes y Año -->
+        <div>
+          <label class="block text-sm font-medium">Mes</label>
+          <select name="mes" class="w-full border px-3 py-2 rounded">
+            {% for m in meses %}
+              <option value="{{ m }}">{{ m }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Año</label>
+          <input type="number" name="año" value="{{ año_actual }}" class="w-full border px-3 py-2 rounded">
+        </div>
+
+        <!-- Tipo de libro -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium">Tipo de libro</label>
+          <select name="tipo" id="tipo-libro" onchange="toggleCampos()" class="w-full border px-3 py-2 rounded">
+            <option value="compra">Compra</option>
+            <option value="venta">Venta</option>
+            <option value="retenciones">Retenciones</option>
+            <option value="ingreso_retenciones">Ingreso de retenciones</option>
+          </select>
+        </div>
+
+        <!-- Código para compra -->
+        <div id="codigo-compra">
+          <label class="block text-sm font-medium">Código (compra)</label>
+          <input type="text" name="codigo_compra" class="w-full border px-3 py-2 rounded">
+        </div>
+
+        <!-- Campos para compra -->
+        <div id="campos-compra" style="display: none;" class="md:col-span-2 space-y-4">
+          <div>
+            <label class="block text-sm font-medium">Desde número de comprobante</label>
+            <input type="number" name="desde_comprobante_compra" class="w-full border px-3 py-2 rounded">
+          </div>
+        </div>
+
+        <!-- Campos para venta -->
+        <div id="campos-venta" style="display: none;" class="md:col-span-2 space-y-4">
+          <div>
+            <label class="block text-sm font-medium">Desde número de comprobante</label>
+            <input type="number" name="desde_comprobante" class="w-full border px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Cuenta por defecto Afecta</label>
+            <input type="text" name="cuenta_afecta" placeholder="Ej: 110101 - Ventas afectas" class="w-full border px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Cuenta por defecto Exenta</label>
+            <input type="text" name="cuenta_exenta" placeholder="Ej: 110102 - Ventas exentas" class="w-full border px-3 py-2 rounded">
+          </div>
+        </div>
+
+        <!-- Campos para retenciones -->
+        <div id="campos-retenciones" style="display: none;" class="md:col-span-2 space-y-4">
+          <div>
+            <label class="block text-sm font-medium">Desde número de comprobante</label>
+            <input type="number" name="desde_comprobante_retencion" class="w-full border px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Cuenta por defecto Afecta</label>
+            <input type="text" name="cuenta_afecta_retencion" placeholder="Ej: 210201 - Retenciones afecta" class="w-full border px-3 py-2 rounded">
+          </div>
+        </div>
+
+        <!-- Campos para ingreso de retenciones -->
+        <div id="campos-ingreso-retenciones" style="display: none;" class="md:col-span-2 space-y-4">
+          <div>
+            <label class="block text-sm font-medium">Desde número de comprobante</label>
+            <input type="number" name="desde_comprobante_ingreso" class="w-full border px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Cuenta por defecto Ingreso</label>
+            <input type="text" name="cuenta_ingreso" placeholder="Ej: 210301 - Ingreso retenciones" class="w-full border px-3 py-2 rounded">
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Cuenta por defecto Egreso</label>
+            <input type="text" name="cuenta_egreso" placeholder="Ej: 210302 - Egreso retenciones" class="w-full border px-3 py-2 rounded">
+          </div>
+        </div>
+
+        <!-- Archivo -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium">Archivo del libro</label>
+          <input type="file" name="archivo" accept=".csv,.xml" class="w-full border px-3 py-2 rounded bg-white">
+        </div>
+      </div>
+
+      <!-- Botón -->
+      <button type="submit" class="w-full bg-green-700 text-white py-3 rounded hover:bg-green-800 transition">
+        📤 Subir y procesar libro
+      </button>
+    </form>
+  </main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear Pregunta Frecuente - {{ empresa.nombre }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <div class="max-w-3xl mx-auto py-10 px-6">
+    <h1 class="text-2xl font-bold text-green-700 mb-6">❓ Crear Pregunta Frecuente</h1>
+
+    <form method="POST" action="{% url 'crear_faq' slug=slug %}" class="space-y-6 bg-white p-6 rounded-lg shadow">
+      {% csrf_token %}
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Pregunta</label>
+        <input type="text" name="pregunta" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Respuesta</label>
+        <textarea name="respuesta" rows="4" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Categoría (opcional)</label>
+        <input type="text" name="categoria" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+      </div>
+
+      <div class="flex items-center">
+        <input type="checkbox" name="activa" checked class="form-checkbox text-green-600">
+        <label class="ml-2 text-sm text-gray-700">Activa</label>
+      </div>
+
+      <div class="flex justify-end">
+        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">💾 Guardar</button>
+      </div>
+    </form>
+
+    <div class="mt-6 text-right">
+      <a href="{% url 'faq_listado' slug=slug %}" class="text-blue-600 hover:underline">⬅️ Volver al listado</a>
+    </div>
+  </div>
+
+</body>
+</html>

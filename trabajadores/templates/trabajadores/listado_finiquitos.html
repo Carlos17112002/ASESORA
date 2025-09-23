@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Finiquitos · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Encabezado -->
+  <header class="bg-red-700 text-white py-5 shadow-md">
+    <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+      <h1 class="text-2xl font-bold">🧾 Finiquitos laborales · <span class="text-white/80">{{ alias }}</span></h1>
+      <a href="/contabilidad/{{ alias }}/libro/" class="text-sm hover:underline">⬅️ Volver al panel</a>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="max-w-6xl mx-auto px-6 py-10 space-y-8">
+
+    <!-- Botón crear finiquito -->
+    <div class="flex justify-end">
+      <a href="/trabajadores/{{ alias }}/crear_finiquito/" class="bg-red-700 text-white px-5 py-3 rounded-lg shadow hover:bg-red-800 transition text-sm flex items-center gap-2">
+        ➕ Crear nuevo finiquito
+      </a>
+    </div>
+
+    <!-- Tabla de finiquitos -->
+    <div class="overflow-x-auto bg-white rounded-xl shadow-md">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gray-200 text-gray-700 sticky top-0">
+          <tr>
+            <th class="px-6 py-3 text-left font-semibold">👤 Trabajador</th>
+            <th class="px-6 py-3 text-left font-semibold">📅 Fecha</th>
+            <th class="px-6 py-3 text-left font-semibold">📝 Motivo</th>
+            <th class="px-6 py-3 text-left font-semibold">💰 Total</th>
+            <th class="px-6 py-3 text-left font-semibold">📁 PDF</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          {% for finiquito in finiquitos %}
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-3">{{ finiquito.trabajador.nombre }}</td>
+            <td class="px-6 py-3">{{ finiquito.fecha_finiquito }}</td>
+            <td class="px-6 py-3">{{ finiquito.motivo }}</td>
+            <td class="px-6 py-3 font-semibold text-green-700">${{ finiquito.total }}</td>
+            <td class="px-6 py-3">
+              {% if finiquito.documento_pdf %}
+                <a href="/trabajadores/{{ alias }}/finiquito/{{ finiquito.id }}/pdf/" class="text-blue-600 hover:underline">📄 Ver PDF</a>
+              {% else %}
+                <span class="text-gray-400">No generado</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="px-6 py-6 text-center text-gray-500">No hay finiquitos registrados.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</body>
+</html>

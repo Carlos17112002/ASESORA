@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Empresa SSR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <div class="max-w-md mx-auto py-10 px-6">
+        <h1 class="text-2xl font-bold text-green-700 mb-6">➕ Crear Nueva Empresa</h1>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <label class="block text-sm font-medium text-gray-700">Nombre de la empresa</label>
+            <input type="text" name="nombre" required class="block w-full border-gray-300 rounded-md shadow-sm">
+
+            <label class="block text-sm font-medium text-gray-700">Sectores (separados por coma)</label>
+            <textarea name="sectores" rows="3" class="block w-full border-gray-300 rounded-md shadow-sm" placeholder="Centro, Norte, Sur, Villa Los Aromos"></textarea>
+
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Crear Empresa</button>
+            </form>
+        </form>
+
+        <div class="mt-6">
+            <a href="{% url 'dashboard_admin_ssr' %}" class="text-blue-600 hover:underline">⬅️ Volver al Panel
+                General</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

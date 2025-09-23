@@ -1,0 +1,4 @@
+FechaEmision,RUTEmisor,RazonSocial,TipoDocumento,Folio,MontoNeto,IVA,MontoTotal
+2025-08-03,,Proveedor Tres,33,1003,80000,15200,95200
+,76543210-1,Proveedor Cuatro,33,,60000,11400,71400
+2025-08-05,76543210-1,Proveedor Cinco,33,1005,texto,,

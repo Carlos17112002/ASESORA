@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar aviso - {{ empresa.nombre }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-green-700 text-white shadow">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">✏️ Editar aviso: {{ empresa.nombre }}</h1>
+      <a href="{% url 'avisos_activos' slug=slug %}" class="text-sm hover:underline">⬅️ Volver a avisos activos</a>
+    </div>
+  </nav>
+
+  <!-- Formulario de edición -->
+  <div class="max-w-3xl mx-auto py-10 px-6">
+    <form method="POST" action="{% url 'editar_aviso' slug=slug aviso_id=aviso.id %}" class="space-y-6 bg-white p-6 rounded-lg shadow">
+      {% csrf_token %}
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Título</label>
+        <input type="text" name="titulo" value="{{ aviso.titulo }}" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Mensaje</label>
+        <textarea name="mensaje" rows="4" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">{{ aviso.mensaje }}</textarea>
+      </div>
+      <div class="flex items-center">
+        <input type="checkbox" name="activo" {% if aviso.activo %}checked{% endif %} class="form-checkbox text-green-600">
+        <label class="ml-2 text-sm text-gray-700">Activo</label>
+      </div>
+      <div class="flex justify-end">
+        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">💾 Guardar cambios</button>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

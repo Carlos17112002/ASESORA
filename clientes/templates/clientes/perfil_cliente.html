@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Cliente - {{ empresa.nombre }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+  <div class="flex flex-col lg:flex-row max-w-7xl mx-auto py-10 px-6 gap-8">
+
+    <!-- Contenido principal -->
+    <main class="flex-1 space-y-12">
+
+      <!-- Encabezado -->
+      <header class="border-b pb-6">
+        <h1 class="text-4xl font-bold text-gray-900">Panel del Cliente</h1>
+        <p class="text-sm text-gray-600">Empresa: <strong>{{ empresa.nombre }}</strong></p>
+      </header>
+
+      <!-- Lecturas -->
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Lecturas recientes</h2>
+        {% if lecturas %}
+          <table class="w-full table-auto bg-white rounded-lg shadow text-sm">
+            <thead class="bg-gray-200 text-gray-700">
+              <tr>
+                <th class="px-4 py-2 text-left">Fecha</th>
+                <th class="px-4 py-2 text-left">Valor (m³)</th>
+                <th class="px-4 py-2 text-left">Observación</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for lectura in lecturas %}
+                <tr class="border-t hover:bg-gray-50">
+                  <td class="px-4 py-2">{{ lectura.fecha }}</td>
+                  <td class="px-4 py-2">{{ lectura.valor|floatformat:0 }}</td>
+                  <td class="px-4 py-2">{{ lectura.observacion }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="text-gray-500">No hay lecturas registradas aún.</p>
+        {% endif %}
+      </section>
+
+      <!-- Boletas -->
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Boletas del mes</h2>
+        {% if boletas %}
+          <table class="w-full table-auto bg-white rounded-lg shadow text-sm">
+            <thead class="bg-gray-200 text-gray-700">
+              <tr>
+                <th class="px-4 py-2 text-left">Periodo</th>
+                <th class="px-4 py-2 text-left">Consumo</th>
+                <th class="px-4 py-2 text-left">Monto</th>
+                <th class="px-4 py-2 text-left">Estado</th>
+                <th class="px-4 py-2 text-left">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for boleta in boletas %}
+                <tr class="border-t hover:bg-gray-50">
+                  <td class="px-4 py-2">{{ boleta.periodo }}</td>
+                  <td class="px-4 py-2">{{ boleta.consumo|floatformat:0 }} m³</td>
+                  <td class="px-4 py-2">${{ boleta.monto|floatformat:0 }}</td>
+                  <td class="px-4 py-2">
+                    {% if boleta.pagada %}
+                      <span class="text-green-600 font-semibold">Pagada</span>
+                    {% else %}
+                      <span class="text-red-600 font-semibold">Pendiente</span>
+                    {% endif %}
+                  </td>
+                  <td class="px-4 py-2 space-x-2">
+                    <a href="{% url 'descargar_boleta_pdf' alias=slug boleta_id=boleta.id %}" class="text-blue-600 hover:underline">📥 PDF</a>
+                    <a href="{% url 'ver_boleta' alias=slug boleta_id=boleta.id %}" class="text-blue-600 hover:underline">Ver</a>
+                    {% if not boleta.pagada %}
+                      <a href="{% url 'pagar_boleta' alias=slug boleta_id=boleta.id %}" class="text-green-600 hover:underline">Pagar</a>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="text-gray-500">No hay boletas disponibles aún.</p>
+        {% endif %}
+      </section>
+
+      <!-- Perfil -->
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Información personal</h2>
+        <div class="bg-white rounded-lg shadow p-6 text-sm text-gray-700 space-y-1">
+          <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
+          <p><strong>RUT:</strong> {{ cliente.rut }}</p>
+          <p><strong>Dirección:</strong> {{ cliente.direccion }}</p>
+          <p><strong>Medidor:</strong> {{ cliente.medidor }}</p>
+          <p><strong>Email:</strong> {{ cliente.email }}</p>
+          <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+          <p><strong>Sector:</strong> {{ cliente.sector }}</p>
+        </div>
+      </section>
+
+      <!-- Logout -->
+      <div class="text-right pt-6">
+        <a href="{% url 'logout' %}" class="text-sm text-blue-600 hover:underline">🔓 Cerrar sesión</a>
+      </div>
+    </main>
+
+    <!-- Barra lateral derecha -->
+    <aside class="w-full lg:w-80 space-y-8">
+
+      <!-- Avisos -->
+    <section>
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">📢 Avisos importantes</h2>
+      {% for aviso in avisos %}
+        <details class="bg-white rounded-lg shadow p-4 mb-2 open:bg-gray-50">
+          <summary class="font-medium text-gray-900 cursor-pointer">{{ aviso.titulo }}</summary>
+          <div class="mt-2 text-sm text-gray-700">
+            {{ aviso.mensaje }}
+          </div>
+        </details>
+      {% empty %}
+        <p class="text-gray-500">No hay avisos activos.</p>
+      {% endfor %}
+    </section>
+
+
+      <!-- FAQs -->
+      <section>
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">❓ Preguntas frecuentes</h2>
+        {% for faq in faqs %}
+          <details class="bg-white rounded-lg shadow p-4 mb-2">
+            <summary class="font-medium text-gray-900 cursor-pointer">{{ faq.pregunta }}</summary>
+            <p class="mt-2 text-sm text-gray-700">{{ faq.respuesta }}</p>
+          </details>
+        {% empty %}
+          <p class="text-gray-500">No hay preguntas frecuentes disponibles.</p>
+        {% endfor %}
+      </section>
+
+    </aside>
+  </div>
+</body>
+</html>

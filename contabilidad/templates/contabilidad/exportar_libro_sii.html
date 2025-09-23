@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Exportar libro SII · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <header class="bg-blue-700 text-white py-4 shadow">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">📁 Exportar libro SII · {{ alias }}</h1>
+      <a href="/contabilidad/{{ alias }}/libros/" class="text-sm hover:underline">⬅️ Volver a libros</a>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-10 space-y-6">
+    <section class="bg-white p-6 rounded shadow space-y-4">
+      <form method="post">
+        {% csrf_token %}
+        <label class="block text-sm font-medium mb-1">Mes a exportar (formato YYYY-MM):</label>
+        <input type="text" name="mes" class="w-full border px-3 py-2 rounded" placeholder="2025-09">
+        <button type="submit" class="mt-4 bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800 transition">
+          📤 Exportar libro
+        </button>
+      </form>
+    </section>
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Finiquito · {{ finiquito.alias }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12pt;
+      color: #333;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      font-size: 16pt;
+      margin-bottom: 20px;
+    }
+    .section {
+      margin-bottom: 25px;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .firma {
+      margin-top: 60px;
+      text-align: center;
+    }
+    .footer {
+      font-size: 10pt;
+      text-align: center;
+      margin-top: 40px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Finiquito Laboral · Empresa {{ finiquito.alias }}</h1>
+
+  <div class="section">
+    <p>Se deja constancia que el trabajador <strong>{{ finiquito.trabajador.nombre }}</strong>, RUT <strong>{{ finiquito.trabajador.rut_trabajador }}</strong>, ha finalizado su relación laboral con la empresa <strong>{{ finiquito.alias }}</strong> en fecha <strong>{{ finiquito.fecha_finiquito }}</strong>.</p>
+    <p>Motivo de término: <strong>{{ finiquito.motivo }}</strong></p>
+  </div>
+
+  <div class="section">
+    <p><span class="label">Indemnización legal:</span> ${{ finiquito.indemnizacion }}</p>
+    <p><span class="label">Vacaciones pendientes:</span> ${{ finiquito.vacaciones_pendientes }}</p>
+    <p><span class="label">Otros conceptos:</span> ${{ finiquito.otros }}</p>
+    <p><span class="label">Total a pagar:</span> <strong>${{ finiquito.total }}</strong></p>
+  </div>
+
+  <div class="section">
+    <p>Ambas partes declaran haber recibido copia del presente documento y estar conformes con su contenido.</p>
+  </div>
+
+  <div class="firma">
+    <p>__________________________</p>
+    <p><strong>{{ finiquito.trabajador.nombre }}</strong></p>
+    <p>Trabajador</p>
+  </div>
+
+  <div class="firma" style="margin-top: 40px;">
+    <p>__________________________</p>
+    <p><strong>Representante Legal</strong></p>
+    <p>Empresa {{ finiquito.alias }}</p>
+  </div>
+
+  <div class="footer">
+    Documento generado automáticamente el {{ finiquito.creado|date:"d/m/Y" }} · Sistema SSR · Panel Fiscal-Laboral
+  </div>
+
+</body>
+</html>

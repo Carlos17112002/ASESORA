@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel SSR - {{ empresa.nombre }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+  <!-- Navbar superior -->
+  <nav class="bg-green-700 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold tracking-wide">Panel SSR · {{ empresa.nombre }}</h1>
+      <div class="flex gap-6 text-sm items-center relative">
+        <a href="{% url 'inventario' slug=slug %}" class="hover:underline">Inventario</a>
+        <a href="{% url 'panel_libro_sii' alias=empresa.slug %}" class="hover:underline">Contabilidad</a>
+        <a href="{% url 'crear_cliente' alias=slug %}" class="hover:underline">Clientes</a>
+        <a href="{% url 'listado_lecturas' alias=slug %}" class="hover:underline">Lecturas</a>
+        <a href="{% url 'avisos' slug=slug %}" class="hover:underline">Avisos</a>
+        <a href="{% url 'faq_listado' slug=slug %}" class="hover:underline">Preguntas</a>
+
+        <!-- Menú desplegable de informes -->
+        <div class="relative">
+          <button onclick="toggleMenu()" class="hover:underline font-semibold focus:outline-none text-white">
+            Informes
+          </button>
+          <div id="menuInformes" class="absolute hidden mt-2 bg-white text-gray-800 shadow-xl rounded-lg z-50 w-64 border border-gray-200 flex flex-col">
+            <div class="px-4 py-2 font-bold text-green-700 border-b bg-gray-50">Selecciona un informe</div>
+            <ul class="flex flex-col divide-y divide-gray-200">
+              <li><a href="{% url 'informe_cargo_descuento' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Cargo y Descuento</a></li>
+              <li><a href="{% url 'informe_cierre_caja' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Cierre de Caja</a></li>
+              <li><a href="{% url 'informe_contabilidad' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Contabilidad</a></li>
+              <li><a href="{% url 'informe_contratos' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Contratos</a></li>
+              <li><a href="{% url 'informe_convenios' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Convenios</a></li>
+              <li><a href="{% url 'informe_DAES' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">DAES</a></li>
+              <li><a href="{% url 'informe_deuda' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Deuda</a></li>
+              <li><a href="{% url 'informe_lecturas' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Lecturas</a></li>
+              <li><a href="{% url 'informe_socios' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Socios</a></li>
+              <li><a href="{% url 'informe_subsidios' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Subsidios</a></li>
+              <li><a href="{% url 'registro_macromedidor' alias=slug %}" class="px-4 py-2 hover:bg-green-50 block">Macromedidor</a></li>
+            </ul>
+          </div>
+        </div>
+
+
+        <a href="{% url 'logout_ssr' %}" class="hover:underline text-red-200">Cerrar sesión</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main class="max-w-7xl mx-auto py-10 px-6 space-y-12">
+
+    <!-- Resumen del sistema -->
+    <section>
+      <h2 class="text-3xl font-bold text-green-700 mb-6">Resumen del Sistema</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <a href="{% url 'listado_clientes' alias=slug %}" class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+          <div class="text-lg font-semibold text-green-700 mb-1">Clientes</div>
+          <p class="text-sm text-gray-500">Registrados</p>
+          <p class="text-2xl font-bold text-green-800 mt-2">{{ total_clientes }}</p>
+        </a>
+        <a href="{% url 'listado_lecturas' alias=slug %}" class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+          <div class="text-lg font-semibold text-green-700 mb-1">Lecturas</div>
+          <p class="text-sm text-gray-500">Del mes</p>
+          <p class="text-2xl font-bold text-green-800 mt-2">{{ lecturas_mes }}</p>
+        </a>
+        <a href="{% url 'avisos_activos' slug=slug %}" class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+          <div class="text-lg font-semibold text-green-700 mb-1">Avisos</div>
+          <p class="text-sm text-gray-500">Activos</p>
+          <p class="text-2xl font-bold text-green-800 mt-2">{{ avisos_activos }}</p>
+        </a>
+        <a href="{% url 'faq_listado' slug=slug %}" class="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition">
+          <div class="text-lg font-semibold text-green-700 mb-1">Preguntas Frecuentes</div>
+          <p class="text-sm text-gray-500">Registradas</p>
+          <p class="text-2xl font-bold text-green-800 mt-2">{{ total_faq }}</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Acciones rápidas -->
+    <section>
+      <h3 class="text-xl font-semibold text-green-800 mb-4">Acciones SSR</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <a href="#" class="block bg-gray-100 hover:bg-gray-200 rounded px-4 py-3 shadow">Reparar entorno</a>
+        <a href="#" class="block bg-gray-100 hover:bg-gray-200 rounded px-4 py-3 shadow">Ver logs por alias</a>
+        <a href="#" class="block bg-gray-100 hover:bg-gray-200 rounded px-4 py-3 shadow">Validar migraciones</a>
+        <a href="#" class="block bg-gray-100 hover:bg-gray-200 rounded px-4 py-3 shadow">Exportar datos</a>
+
+        <form method="post" action="{% url 'generar_boletas_ssr' slug=slug %}" class="col-span-2">
+          {% csrf_token %}
+          <button class="w-full bg-green-700 text-white px-4 py-3 rounded shadow hover:bg-green-800 transition">
+            Generar boletas del mes
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Panel admin -->
+    {% if request.user.is_superuser %}
+      <div class="text-right pt-6">
+        <a href="{% url 'dashboard_admin_ssr' %}" class="text-sm text-blue-600 hover:underline">Volver al Panel General</a>
+      </div>
+    {% endif %}
+
+  </main>
+
+  <!-- Script para menú desplegable -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('menuInformes');
+      menu.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function (event) {
+      const menu = document.getElementById('menuInformes');
+      const button = event.target.closest('button');
+      if (!event.target.closest('#menuInformes') && !button) {
+        menu.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

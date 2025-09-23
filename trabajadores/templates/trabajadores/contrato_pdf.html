@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contrato laboral · {{ contrato.alias }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12pt;
+      color: #333;
+      line-height: 1.6;
+      margin: 40px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 16pt;
+      margin-bottom: 20px;
+    }
+    .section {
+      margin-bottom: 25px;
+    }
+    .label {
+      font-weight: bold;
+    }
+    .firma {
+      margin-top: 60px;
+      text-align: center;
+    }
+    .firma p {
+      margin: 0;
+    }
+    .footer {
+      font-size: 10pt;
+      text-align: center;
+      margin-top: 40px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Contrato de Trabajo · Empresa {{ contrato.alias }}</h1>
+
+  <div class="section">
+    <p>Entre la empresa <strong>{{ contrato.alias }}</strong> y el trabajador <strong>{{ contrato.nombre }}</strong>, RUT <strong>{{ contrato.rut_trabajador }}</strong>, se celebra el siguiente contrato laboral conforme a la legislación vigente.</p>
+  </div>
+
+  <div class="section">
+    <p><span class="label">Cargo:</span> {{ contrato.cargo }}</p>
+    <p><span class="label">Jornada:</span> {{ contrato.get_jornada_display }}</p>
+    <p><span class="label">Tipo de contrato:</span> {{ contrato.get_tipo_contrato_display }}</p>
+    <p><span class="label">Fecha de inicio:</span> {{ contrato.fecha_inicio }}</p>
+    {% if contrato.fecha_termino %}
+      <p><span class="label">Fecha de término:</span> {{ contrato.fecha_termino }}</p>
+    {% endif %}
+  </div>
+
+  <div class="section">
+    <p><span class="label">Sueldo base:</span> ${{ contrato.sueldo_base }}</p>
+    <p><span class="label">Gratificación:</span> ${{ contrato.gratificacion }}</p>
+    <p><span class="label">Bonos:</span> ${{ contrato.bonos }}</p>
+    <p>El trabajador recibirá su remuneración de forma mensual, según lo establecido en la legislación laboral vigente.</p>
+  </div>
+
+  <div class="section">
+    <p>Ambas partes declaran haber leído y comprendido el contenido del presente contrato, firmando en señal de conformidad.</p>
+  </div>
+
+  <div class="firma">
+    <p>__________________________</p>
+    <p><strong>{{ contrato.nombre }}</strong></p>
+    <p>Trabajador</p>
+  </div>
+
+  <div class="firma" style="margin-top: 40px;">
+    <p>__________________________</p>
+    <p><strong>Representante Legal</strong></p>
+    <p>Empresa {{ contrato.alias }}</p>
+  </div>
+
+  <div class="footer">
+    Contrato generado automáticamente el {{ contrato.creado|date:"d/m/Y" }} · Sistema SSR · Panel Fiscal-Laboral
+  </div>
+
+</body>
+</html>

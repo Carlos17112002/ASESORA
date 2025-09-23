@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Libros SII subidos · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <!-- Encabezado -->
+  <header class="bg-green-700 text-white py-4 shadow">
+    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">📁 Libros SII subidos · {{ alias }}</h1>
+      <a href="/contabilidad/{{ alias }}/libro/" class="text-sm hover:underline">⬅️ Volver al panel</a>
+    </div>
+  </header>
+
+  <!-- Filtros -->
+  <main class="max-w-6xl mx-auto px-4 py-10 space-y-8">
+    <form method="get" class="bg-white p-4 rounded-lg shadow flex flex-wrap gap-4 items-end">
+      <div>
+        <label class="block text-sm font-medium">Mes</label>
+        <select name="mes" class="border px-3 py-2 rounded w-32">
+        <option value="">Todos</option>
+        {% for m in meses %}
+            <option value="{{ m }}" {% if request.GET.mes == m|stringformat:"s" %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+        </select>
+
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Año</label>
+        <input type="number" name="año" value="{{ request.GET.año }}" class="border px-3 py-2 rounded w-32">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Tipo</label>
+        <select name="tipo" class="border px-3 py-2 rounded w-40">
+          <option value="">Todos</option>
+          <option value="compra" {% if request.GET.tipo == "compra" %}selected{% endif %}>Compra</option>
+          <option value="venta" {% if request.GET.tipo == "venta" %}selected{% endif %}>Venta</option>
+          <option value="retenciones" {% if request.GET.tipo == "retenciones" %}selected{% endif %}>Retenciones</option>
+          <option value="ingreso_retenciones" {% if request.GET.tipo == "ingreso_retenciones" %}selected{% endif %}>Ingreso de retenciones</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium">Estado</label>
+        <select name="estado" class="border px-3 py-2 rounded w-40">
+          <option value="">Todos</option>
+          <option value="subido" {% if request.GET.estado == "subido" %}selected{% endif %}>Subido</option>
+          <option value="procesando" {% if request.GET.estado == "procesando" %}selected{% endif %}>Procesando</option>
+          <option value="validado" {% if request.GET.estado == "validado" %}selected{% endif %}>Validado</option>
+          <option value="error" {% if request.GET.estado == "error" %}selected{% endif %}>Con error</option>
+        </select>
+      </div>
+
+      <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded shadow hover:bg-green-800 transition text-sm">
+        🔍 Filtrar
+      </button>
+    </form>
+
+    <!-- Botón subir -->
+    <div class="flex justify-between items-center">
+      <h2 class="text-lg font-semibold text-green-700">📄 Lista Libros</h2>
+      <a href="/contabilidad/{{ alias }}/libro/subir/" class="bg-green-700 text-white px-4 py-2 rounded shadow hover:bg-green-800 transition text-sm">
+        📤 Subir nuevo libro desde SII
+      </a>
+    </div>
+
+    <!-- Tabla -->
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+      <table class="min-w-full table-auto text-sm">
+        <thead class="bg-green-100 text-green-800">
+          <tr>
+            <th class="px-4 py-2 text-center">Revisar</th>
+            <th class="px-4 py-2 text-left">Mes</th>
+            <th class="px-4 py-2 text-left">Año</th>
+            <th class="px-4 py-2 text-left">Tipo</th>
+            <th class="px-4 py-2 text-left">Usuario</th>
+            <th class="px-4 py-2 text-left">Fecha subida</th>
+            <th class="px-4 py-2 text-center">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for libro in libros %}
+            <tr class="border-b hover:bg-green-50">
+              <td class="px-4 py-2 text-center">
+                <a href="/contabilidad/{{ alias }}/libro/{{ libro.id }}/revisar/" class="text-sm text-blue-600 hover:underline">
+                  🔍 Ver archivo
+                </a>
+                <form method="post" action="/contabilidad/{{ alias }}/libro/{{ libro.id }}/eliminar/" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este libro?');">
+                  {% csrf_token %}
+                  <button type="submit" class="text-sm text-red-600 hover:underline ml-2">🗑️ Eliminar</button>
+                </form>
+
+              </td>
+              <td class="px-4 py-2">{{ libro.mes }}</td>
+              <td class="px-4 py-2">{{ libro.año }}</td>
+              <td class="px-4 py-2 capitalize">{{ libro.tipo }}</td>
+              <td class="px-4 py-2">{{ libro.usuario }}</td>
+              <td class="px-4 py-2">{{ libro.fecha_subida|date:"d/m/Y H:i" }}</td>
+              <td class="px-4 py-2 text-center">
+                {% if libro.estado == 'procesando' %}
+                  <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-semibold">🔄 Procesando</span>
+                {% elif libro.estado == 'validado' %}
+                  <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">✅ Validado</span>
+                {% elif libro.estado == 'error' %}
+                  <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-semibold">⚠️ Con error</span>
+                {% else %}
+                  <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-semibold">📤 Subido</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="7" class="px-4 py-6 text-center text-gray-500">No hay libros subidos que coincidan con los filtros.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

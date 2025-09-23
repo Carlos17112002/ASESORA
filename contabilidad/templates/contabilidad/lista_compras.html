@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Compras · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <header class="bg-green-700 text-white py-4 shadow">
+    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">📦 Compras registradas · {{ alias }}</h1>
+      <a href="/contabilidad/{{ alias }}/libro/" class="text-sm hover:underline">⬅️ Volver al libro</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-10">
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+      <table class="min-w-full table-auto text-sm">
+        <thead class="bg-green-100 text-green-800">
+          <tr>
+            <th class="px-4 py-2 text-left">Fecha</th>
+            <th class="px-4 py-2 text-left">RUT Emisor</th>
+            <th class="px-4 py-2 text-left">Razón Social</th>
+            <th class="px-4 py-2 text-center">Tipo</th>
+            <th class="px-4 py-2 text-right">Folio</th>
+            <th class="px-4 py-2 text-right">Neto</th>
+            <th class="px-4 py-2 text-right">IVA</th>
+            <th class="px-4 py-2 text-right">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for doc in compras %}
+            <tr class="border-b hover:bg-green-50">
+              <td class="px-4 py-2">{{ doc.fecha_emision }}</td>
+              <td class="px-4 py-2">{{ doc.rut_emisor }}</td>
+              <td class="px-4 py-2">{{ doc.razon_social }}</td>
+              <td class="px-4 py-2 text-center">{{ doc.tipo_documento }}</td>
+              <td class="px-4 py-2 text-right">{{ doc.folio }}</td>
+              <td class="px-4 py-2 text-right">${{ doc.monto_neto }}</td>
+              <td class="px-4 py-2 text-right">${{ doc.iva }}</td>
+              <td class="px-4 py-2 text-right font-semibold">${{ doc.monto_total }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="8" class="px-4 py-6 text-center text-gray-500">No hay compras registradas.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

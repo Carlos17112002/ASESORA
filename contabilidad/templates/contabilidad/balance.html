@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Balance contable - {{ alias }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <!-- Encabezado -->
+  <header class="bg-green-700 text-white py-4 shadow">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">📊 Balance contable · {{ alias }}</h1>
+      <a href="/contabilidad/{{ alias }}/movimientos/" class="text-sm hover:underline">⬅️ Volver a movimientos</a>
+    </div>
+  </header>
+
+  <!-- Tabla de balance -->
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-lg font-semibold text-green-700 mb-4">Resumen por cuenta</h2>
+      <table class="min-w-full table-auto text-sm">
+        <thead class="bg-green-100 text-green-800">
+          <tr>
+            <th class="px-4 py-2 text-left">Cuenta</th>
+            <th class="px-4 py-2 text-right">Total Debe</th>
+            <th class="px-4 py-2 text-right">Total Haber</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in balance %}
+            <tr class="border-b hover:bg-green-50">
+              <td class="px-4 py-2">{{ item.cuenta__nombre }}</td>
+              <td class="px-4 py-2 text-right">${{ item.total_debe|default:"0" }}</td>
+              <td class="px-4 py-2 text-right">${{ item.total_haber|default:"0" }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="3" class="px-4 py-6 text-center text-gray-500">No hay movimientos registrados.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

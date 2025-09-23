@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-6xl mx-auto py-10 px-6">
+  <h2 class="text-3xl font-bold text-green-700 mb-6">📄 {{ titulo }}</h2>
+
+  <!-- Filtros -->
+  <form method="get" class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+    <input type="date" name="desde" value="{{ request.GET.desde }}" class="px-4 py-2 rounded border">
+    <input type="date" name="hasta" value="{{ request.GET.hasta }}" class="px-4 py-2 rounded border">
+    <button class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">🔍 Filtrar</button>
+  </form>
+
+  <!-- Tabla de resultados -->
+  <div class="overflow-x-auto bg-white rounded shadow">
+    <table class="min-w-full text-sm">
+      <thead class="bg-green-100 text-green-800">
+        <tr>
+          {% for col in columnas %}
+            <th class="px-4 py-2 text-left">{{ col }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for fila in datos %}
+        <tr class="border-b hover:bg-green-50">
+          {% for celda in fila %}
+            <td class="px-4 py-2">{{ celda }}</td>
+          {% endfor %}
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="{{ columnas|length }}" class="px-4 py-6 text-center text-gray-500">No hay datos disponibles.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Exportar -->
+  <div class="mt-6 text-right">
+    <a href="?export=pdf" class="text-sm text-blue-600 hover:underline">📤 Exportar a PDF</a>
+  </div>
+</div>
+{% endblock %}

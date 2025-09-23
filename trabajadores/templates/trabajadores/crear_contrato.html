@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Crear contrato laboral · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+
+  <!-- Encabezado -->
+  <header class="bg-green-700 text-white py-4 shadow">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">📝 Nuevo contrato · {{ alias }}</h1>
+      <a href="/trabajadores/{{ alias }}/contratos/" class="text-sm hover:underline">⬅️ Volver a contratos</a>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <section class="bg-white p-6 rounded shadow space-y-6">
+
+      <h2 class="text-lg font-semibold text-green-700">📄 Datos del contrato</h2>
+
+      {% if form.errors %}
+        <div class="bg-red-100 text-red-700 p-4 rounded">
+          <p class="font-semibold">⚠️ Hay errores en el formulario:</p>
+          <ul class="list-disc ml-5">
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1">RUT del trabajador</label>
+            {{ form.rut_trabajador }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Nombre completo</label>
+            {{ form.nombre }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Cargo</label>
+            {{ form.cargo }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Jornada</label>
+            {{ form.jornada }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Tipo de contrato</label>
+            {{ form.tipo_contrato }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">AFP</label>
+            {{ form.afp }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Sistema de salud</label>
+            {{ form.salud }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Sueldo base</label>
+            {{ form.sueldo_base }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Gratificación</label>
+            {{ form.gratificacion }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Bonos</label>
+            {{ form.bonos }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Fecha de inicio</label>
+            {{ form.fecha_inicio }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Fecha de término</label>
+            {{ form.fecha_termino }}
+          </div>
+        </div>
+
+        <div class="pt-6">
+          <button type="submit" class="bg-green-700 text-white px-6 py-2 rounded hover:bg-green-800 transition">
+            ✅ Generar contrato
+          </button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+</body>
+</html>

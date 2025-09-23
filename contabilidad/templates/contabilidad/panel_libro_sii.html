@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Fiscal-Laboral · {{ alias }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Encabezado -->
+  <header class="bg-green-800 text-white py-5 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <h1 class="text-2xl font-bold">📊 Panel Fiscal-Laboral · <span class="text-white/80">{{ alias }}</span></h1>
+      <a href="/empresas/{{ alias }}/panel_empresa/" class="text-sm hover:underline">⬅️ Volver</a>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="max-w-7xl mx-auto px-6 py-10 space-y-12">
+
+    <!-- Selector de mes -->
+    <form method="get" class="flex flex-wrap items-center gap-4 bg-white p-4 rounded shadow">
+      <label for="mes" class="text-sm font-medium text-gray-700">📅 Mes contable:</label>
+      <input type="month" name="mes" id="mes" value="{{ mes_full }}" class="border px-3 py-2 rounded w-40">
+      <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800 text-sm">
+        🔄 Ver resumen
+      </button>
+      <div class="flex gap-4 ml-auto">
+        <a href="?mes={{ mes_anterior }}" class="text-sm text-blue-600 hover:underline">⬅️ Mes anterior</a>
+        <a href="?mes={{ mes_siguiente }}" class="text-sm text-blue-600 hover:underline">➡️ Mes siguiente</a>
+      </div>
+    </form>
+
+    <!-- Resumen contable -->
+    <section>
+      <h2 class="text-xl font-semibold text-green-700 mb-4">📅 Resumen contable · {{ mes }}/{{ año }}</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-green-600">
+          <p class="text-sm text-gray-500">Total Compras</p>
+          <p class="text-2xl font-bold text-green-800">${{ resumen.total_compras }}</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-red-500">
+          <p class="text-sm text-gray-500">IVA Compras</p>
+          <p class="text-2xl font-bold text-red-600">${{ resumen.iva_compras }}</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-green-600">
+          <p class="text-sm text-gray-500">Total Ventas</p>
+          <p class="text-2xl font-bold text-green-800">${{ resumen.total_ventas }}</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-md p-5 border-l-4 border-red-500">
+          <p class="text-sm text-gray-500">IVA Ventas</p>
+          <p class="text-2xl font-bold text-red-600">${{ resumen.iva_ventas }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Acciones contables -->
+    <section>
+      <h3 class="text-lg font-semibold text-gray-700 mb-4">📁 Acciones contables</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a href="/contabilidad/{{ alias }}/libro/exportar/" class="flex items-center gap-2 bg-green-700 text-white px-5 py-4 rounded-lg shadow hover:bg-green-800 transition text-sm">
+          📤 Exportar libro mensual
+        </a>
+        <a href="/contabilidad/{{ alias }}/libros/" class="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 px-5 py-4 rounded-lg shadow text-sm">
+          📚 Ver libros
+        </a>
+        <a href="/contabilidad/{{ alias }}/subir/" class="flex items-center gap-2 bg-green-700 text-white px-5 py-4 rounded-lg shadow hover:bg-green-800 transition text-sm">
+          📥 Subir documentos contables
+        </a>
+      </div>
+    </section>
+
+    <!-- Acciones laborales -->
+    <section>
+      <h3 class="text-lg font-semibold text-gray-700 mb-4">👷 Gestión laboral</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <a href="/trabajadores/{{ alias }}/contratos/" class="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 px-5 py-4 rounded-lg shadow text-sm">
+          📄 Contratos laborales
+        </a>
+        <a href="/trabajadores/{{ alias }}/finiquitos/" class="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 px-5 py-4 rounded-lg shadow text-sm">
+          🧾 Finiquitos
+        </a>
+        <a href="/trabajadores/{{ alias }}/liquidaciones/" class="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 px-5 py-4 rounded-lg shadow text-sm">
+          📋 Liquidaciones
+        </a>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

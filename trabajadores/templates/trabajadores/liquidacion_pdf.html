@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Liquidación · {{ liquidacion.alias }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12pt; margin: 40px; line-height: 1.6; color: #333; }
+    h1 { text-align: center; font-size: 16pt; margin-bottom: 20px; }
+    .section { margin-bottom: 25px; }
+    .label { font-weight: bold; }
+    .footer { font-size: 10pt; text-align: center; margin-top: 40px; color: #777; }
+  </style>
+</head>
+<body>
+
+  <h1>Liquidación de sueldo · Empresa {{ liquidacion.alias }}</h1>
+
+  <div class="section">
+    <p>Trabajador: <strong>{{ liquidacion.trabajador.nombre }}</strong></p>
+    <p>RUT: <strong>{{ liquidacion.trabajador.rut_trabajador }}</strong></p>
+    <p>Mes de liquidación: <strong>{{ liquidacion.mes }}</strong></p>
+  </div>
+
+  <div class="section">
+    <h2>Haberes</h2>
+    <p>Sueldo base: ${{ liquidacion.sueldo_base }}</p>
+    <p>Gratificación: ${{ liquidacion.gratificacion }}</p>
+    <p>Bonos: ${{ liquidacion.bonos }}</p>
+    <p><span class="label">Total haberes:</span> ${{ liquidacion.total_haberes }}</p>
+  </div>
+
+  <div class="section">
+    <h2>Descuentos previsionales</h2>
+    <p>AFP: ${{ liquidacion.afp }}</p>
+    <p>Salud: ${{ liquidacion.salud }}</p>
+    <p>Seguro de cesantía: ${{ liquidacion.seguro_cesantia }}</p>
+    <p>Otros descuentos: ${{ liquidacion.otros_descuentos }}</p>
+    <p><span class="label">Total descuentos:</span> ${{ liquidacion.total_descuentos }}</p>
+  </div>
+
+  <div class="section">
+    <h2>Días del mes</h2>
+    <p>Días trabajados: {{ liquidacion.dias_trabajados }}</p>
+    <p>Licencia médica: {{ liquidacion.dias_licencia }}</p>
+    <p>Vacaciones: {{ liquidacion.dias_vacaciones }}</p>
+    <p>Ausencias injustificadas: {{ liquidacion.dias_ausente }}</p>
+  </div>
+
+  <div class="section">
+    <h2>Total líquido a pagar</h2>
+    <p><span class="label">Líquido pagado:</span> <strong>${{ liquidacion.liquido_pagado }}</strong></p>
+  </div>
+
+  <div class="footer">
+    Documento generado automáticamente el {{ liquidacion.creado|date:"d/m/Y" }} · Sistema SSR · Panel Fiscal-Laboral
+  </div>
+
+</body>
+</html>
